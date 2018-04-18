@@ -60,8 +60,8 @@ public class Product {
     @JoinColumn(name = "product_category_id")
     private ProductCategory productCategory;
     @ManyToOne
-    @JoinColumn(name = "product_sex_id")
-    private ProductSex productSex;
+    @JoinColumn(name = "product_gender_id")
+    private ProductGender productGender;
     @ManyToOne
     @JoinColumn(name = "product_brand_id")
     private ProductSize productSize;

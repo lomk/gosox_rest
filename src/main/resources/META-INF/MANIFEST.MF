@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Class-Path: localnet_rest
+Class-Path: gosox_rest
 Main-Class: ua.com.gosox.SpringBootMvcApplication
 

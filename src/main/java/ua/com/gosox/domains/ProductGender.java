@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(schema = "gosox", name = "PRODUCT_SEX")
 @Getter
 @Setter
-public class ProductSex {
+public class ProductGender {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> getUser(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
         User user = userService.getUserById(id);
         if (user == null){
             return new ResponseEntity(new CustomErrorType(
@@ -43,7 +43,7 @@ public class UserController {
     
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody User user){
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user){
         User currentUser = userService.getUserById(id);
         if (currentUser == null){
             return new ResponseEntity(new CustomErrorType(
@@ -79,7 +79,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> delUser(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> delUser(@PathVariable("id") Long id) {
         User user = userService.getUserById(id);
         if (user == null ){
             return new ResponseEntity(new CustomErrorType(

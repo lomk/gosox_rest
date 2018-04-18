@@ -8,8 +8,8 @@ import ua.com.gosox.domains.User;
  */
 public interface UserService {
     Iterable<User> listAllUsers();
-    User getUserById(Integer id);
-    void deleteUser(Integer id);
+    User getUserById(Long id);
+    void deleteUser(Long id);
     void save(User user);
     public User findByUsername(String username);
 }

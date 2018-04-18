@@ -34,12 +34,12 @@ import org.springframework.web.filter.CorsFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {
-        "net.elyland.localnet",
-        "net.elyland.localnet.controllers",
-        "net.elyland.localnet.domains",
-        "net.elyland.localnet.repositories",
-        "net.elyland.localnet.services",
-        "net.elyland.localnet.validators"})
+        "ua.com.gosox",
+        "ua.com.gosox.controllers",
+        "ua.com.gosox.domains",
+        "ua.com.gosox.repositories",
+        "ua.com.gosox.services",
+        "ua.com.gosox.validators"})
 
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -62,8 +62,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/admin/**").access("hasAuthority('ADMIN')")
 //                .antMatchers("/api/tester/**").access("hasAuthority('TESTER')")
-                .antMatchers(
-                        "/**",
+                .antMatchers("/**",
+                        "/api/**",
                         "/logon/**",
                         "/login")
                 .permitAll()
