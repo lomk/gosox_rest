@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Created by Igor on 29-Jun-16.
  */
 @Entity
-@Table(schema = "localnet", name = "role")
+@Table(schema = "localnet", name = "ROLE")
 @Getter
 @Setter
 public class Role implements Serializable {
@@ -19,7 +19,7 @@ public class Role implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @Column(name = "name")
     private String name;
 

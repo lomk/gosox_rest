@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/logon")
-public class RestLoginController {
+public class LoginController {
     @Autowired
     UserRepository userRepository;
 

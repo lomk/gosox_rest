@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Created by Igor on 17-Jun-16.
  */
 @Entity
-@Table(schema = "localnet", name = "user")
+@Table(schema = "localnet", name = "USER")
 @Getter
 @Setter
 public class User implements Serializable {
@@ -21,7 +21,7 @@ public class User implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @Column(name = "username")
     private String username;
     @Column(name = "password")

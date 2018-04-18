@@ -14,7 +14,7 @@ import java.util.List;
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/admin/role")
-public class RestRoleController {
+public class RoleController {
     
     @Autowired
     RoleRepository roleRepository;
