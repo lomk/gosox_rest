@@ -26,13 +26,9 @@ public class Product {
     private Long barcode;
     @Column(name = "internal_code")
     private Long internalCode;
-    @Column(name = "price_purchase_usd")
-    private Long pricePurchaseUsd;
-    @Column(name = "price_purchase_uah")
-    private Long pricePurchaseUah;
-    @Column(name = "price_sell_usd")
+    @Column(name = "price_usd")
     private Long priceSellUsd;
-    @Column(name = "price_sell_uah")
+    @Column(name = "price_uah")
     private Long priceSellUah;
     @Column(name = "quantity")
     private Long quantity;
