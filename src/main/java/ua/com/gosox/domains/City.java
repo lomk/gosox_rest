@@ -1,4 +1,4 @@
 package ua.com.gosox.domains;
 
-public class OrderHistory {
+public class City {
 }
