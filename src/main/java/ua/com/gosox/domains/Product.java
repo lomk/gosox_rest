@@ -1,6 +1,7 @@
 package ua.com.gosox.domains;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,37 +19,22 @@ public class Product {
     private Long id;
     @Column(name = "name")
     private String name;
-    @Column(name = "description")
-    private String description;
+    @Column(name = "short_description")
+    private String shortDescription;
+    @Column(name = "full_description")
+    private String fullDescription;
     @Column(name = "seo_description")
     private String seoDescription;
     @Column(name = "barcode")
     private Long barcode;
     @Column(name = "internal_code")
     private Long internalCode;
-    @Column(name = "price_usd")
-    private Long priceSellUsd;
     @Column(name = "price_uah")
-    private Long priceSellUah;
-    @Column(name = "quantity")
-    private Long quantity;
-    @Column(name = "number_of_orders")
-    private Long numberOfOrders;
+    private Long priceUah;
     @Column(name = "is_new")
     private Boolean isNew;
-    @Column(name = "image_url_1")
-    private String imageUrl1;
-    @Column(name = "image_url_2")
-    private String imageUrl2;
-    @Column(name = "image_url_3")
-    private String imageUrl3;
-    @Column(name = "image_url_4")
-    private String imageUrl4;
-    @Column(name = "image_url_5")
-    private String imageUrl5;
-
-
-
+    @Column(name = "in_promoution")
+    private Boolean inPromoution;
     @ManyToOne
     @JoinColumn(name = "product_brand_id")
     private ProductBrand productBrand;
@@ -59,9 +45,7 @@ public class Product {
     @JoinColumn(name = "product_gender_id")
     private ProductGender productGender;
     @ManyToOne
-    @JoinColumn(name = "product_brand_id")
+    @JoinColumn(name = "product_size_id")
     private ProductSize productSize;
-    @ManyToOne
-    @JoinColumn(name = "product_brand_id")
-    private ProductComposition productComposition;
+
 }

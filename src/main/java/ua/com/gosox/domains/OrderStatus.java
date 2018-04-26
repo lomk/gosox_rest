@@ -7,14 +7,16 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(schema = "gosox", name = "PRODUCT_COMPOSITION")
+@Table(schema = "gosox", name = "ORDER_STATUS")
 @Getter
 @Setter
-public class ProductComposition {
+public class OrderStatus {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name")
-    private String name;
+
+    @Column
+    private String status;
 }

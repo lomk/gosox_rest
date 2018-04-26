@@ -21,4 +21,9 @@ public class UserAddress {
             cascade =  CascadeType.ALL)
     @JoinColumn(name = "user_profile_id", nullable = false)
     private UserProfile userProfile;
+
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.ALL)
+    @JoinColumn(name = "city_id", nullable = false)
+    private City city;
 }

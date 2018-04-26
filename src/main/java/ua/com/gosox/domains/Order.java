@@ -1,11 +1,8 @@
 package ua.com.gosox.domains;
 
-
 import lombok.Getter;
 import lombok.Setter;
-
 import javax.persistence.*;
-
 import java.util.Set;
 
 @Entity
@@ -21,6 +18,12 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL)
+    @JoinColumn(name = "order_status_id", nullable = false)
+    private OrderStatus orderStatus;
+
+
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -33,4 +36,5 @@ public class Order {
             cascade =  CascadeType.ALL)
     @JoinColumn(name = "delivery_type_id", nullable = false)
     private DeliveryType deliveryType;
+
 }

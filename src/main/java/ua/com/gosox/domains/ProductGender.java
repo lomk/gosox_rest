@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(schema = "gosox", name = "PRODUCT_SEX")
+@Table(schema = "gosox", name = "PRODUCT_GENDER")
 @Getter
 @Setter
 public class ProductGender {
