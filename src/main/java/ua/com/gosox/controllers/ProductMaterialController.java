@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/product-composition")
-public class ProductCompositionController {
+public class ProductMaterialController {
 }
