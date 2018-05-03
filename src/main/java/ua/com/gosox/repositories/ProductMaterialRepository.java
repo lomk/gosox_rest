@@ -4,4 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ua.com.gosox.domains.ProductMaterial;
 
 public interface ProductMaterialRepository extends JpaRepository<ProductMaterial, Integer> {
+    ProductMaterial findByMaterialName(String materialName);
 }

@@ -4,4 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ua.com.gosox.domains.ProductSize;
 
 public interface ProductSizeRepository extends JpaRepository<ProductSize, Integer> {
+    ProductSize findBySizeName(String sizeName);
 }

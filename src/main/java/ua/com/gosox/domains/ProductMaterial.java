@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(schema = "gosox", name = "PRODUCT_COMPOSITION")
+@Table(schema = "gosox", name = "PRODUCT_MATERIAL")
 @Getter
 @Setter
 public class ProductMaterial {
@@ -15,6 +15,6 @@ public class ProductMaterial {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name")
-    private String name;
+    @Column(name = "material_name", unique = true)
+    private String materialName;
 }

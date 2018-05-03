@@ -47,5 +47,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "product_size_id")
     private ProductSize productSize;
+    @ManyToOne
+    @JoinColumn(name = "product_material_id")
+    private ProductMaterial productMaterial;
 
 }
