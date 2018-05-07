@@ -8,6 +8,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -22,16 +23,16 @@ import javax.persistence.EntityManagerFactory;
 import java.beans.PropertyVetoException;
 import java.util.HashMap;
 
-@Configuration
-@EnableJpaRepositories(
-        basePackages = "ua.com.gosox.repositories",
-        entityManagerFactoryRef = "adminEntityManagerFactory",
-        transactionManagerRef = "adminTransactionManager"
-)
-@EntityScan("ua.com.gosox.domains")
-@EnableTransactionManagement
+//@Configuration
+//@EnableJpaRepositories(
+//        basePackages = "ua.com.gosox.repositories",
+//        entityManagerFactoryRef = "adminEntityManagerFactory",
+//        transactionManagerRef = "adminTransactionManager"
+//)
+//@EntityScan("ua.com.gosox.domains.*")
+//@EnableTransactionManagement
 public class RepositoryConfiguration {
-    @Value("${admin.datasource.driver}")
+   /* @Value("${admin.datasource.driver}")
     private String DB_DRIVER;
 
     @Value("${admin.datasource.password}")
@@ -91,15 +92,15 @@ public class RepositoryConfiguration {
     {
 
         HashMap<String, Object> properties = new HashMap<>();
-//        properties.put("hibernate.hbm2ddl.auto", "create");
+        properties.put("hibernate.hbm2ddl.auto", "update");
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-//        properties.put("hibernate.show_sql", "true");
+        properties.put("hibernate.show_sql", "true");
 //        properties.put("hibernate.hbm2ddl.auto", "HIBERNATE_HBM2DDL_AUTO");
 //        properties.put("hibernate.dialect", "HIBERNATE_DIALECT");
 //        properties.put("hibernate.show_sql", "HIBERNATE_SHOW_SQL");
         return builder
                 .dataSource(adminDataSource())
-                .packages("net.elyland.localnet.domains")
+                .packages("ua.com.gosox.domains")
                 .persistenceUnit("adminPersistenceUnit")
                 .properties(properties)
                 .build();
@@ -110,5 +111,5 @@ public class RepositoryConfiguration {
     public JpaTransactionManager adminTransactionManager(@Qualifier("adminEntityManagerFactory") final EntityManagerFactory factory)
     {
         return new JpaTransactionManager(factory);
-    }
+    }*/
 }

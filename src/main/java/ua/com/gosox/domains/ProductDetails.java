@@ -30,7 +30,7 @@ public class ProductDetails {
     private Long numberOfCart;
     @Column(name = "number_of_refusal")
     private Long numberOfRefusal;
-    @Column(name = "number_of_refusal")
+    @Column(name = "number_in_stock")
     private Long quantityInStock;
 
     @OneToOne(fetch = FetchType.LAZY,

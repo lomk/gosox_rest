@@ -15,11 +15,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin/product-review")
 public class AdminProductReviewController {
+
     @Autowired
     ProductReviewRepository productReviewRepository;
 
     @RequestMapping(value = "all", method = RequestMethod.GET)
-    public ResponseEntity<?> listProductReview() {
+    public ResponseEntity<?> listProductReviews() {
         List<ProductReview> productReviews = productReviewRepository.findAll();
         if (productReviews == null){
             return new ResponseEntity(new CustomErrorType("No data found"),
@@ -47,9 +48,7 @@ public class AdminProductReviewController {
                     "Unable to upate. ProductReview with id " + id + " not found."),
                     HttpStatus.NOT_FOUND);
         }
-        currentProductReview.setReviewName(productReview.getReviewName());
-        productReviewRepository.save(currentProductReview);
-        return new ResponseEntity<>(currentProductReview, HttpStatus.OK);
+        return new ResponseEntity<>(productReview, HttpStatus.OK);
     }
 
     @RequestMapping(value="add", method=RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -57,13 +56,6 @@ public class AdminProductReviewController {
 
         if (productReview == null){
             return new ResponseEntity(new CustomErrorType("No productReview"),HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (productReview.getReviewName() == null || productReview.getReviewName().isEmpty()){
-            return new ResponseEntity(new CustomErrorType("No productReview name"),HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (productReviewRepository.findByReviewName(productReview.getReviewName()) != null){
-            return new ResponseEntity(new CustomErrorType("Unable to create. A productReview name " +
-                    productReview.getReviewName() + " already exist."),HttpStatus.CONFLICT);
         }
         productReviewRepository.save(productReview);
         return new ResponseEntity<>(productReview, HttpStatus.CREATED);

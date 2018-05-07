@@ -1,7 +1,15 @@
 package ua.com.gosox.domains;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+
+@Entity
+@Table(schema = "gosox", name = "PRODUCT_REVIEW")
+@Getter
+@Setter
 public class ProductReview {
 
     @Id
@@ -10,7 +18,7 @@ public class ProductReview {
     private Long id;
 
     @Column(name = "title")
-    private String name;
+    private String title;
 
     @Column(name = "body")
     private String body;
