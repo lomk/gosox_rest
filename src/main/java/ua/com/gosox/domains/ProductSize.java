@@ -16,5 +16,5 @@ public class ProductSize {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "size_name", unique = true)
-    private String sizeName;
+    private String size;
 }

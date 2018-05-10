@@ -15,6 +15,6 @@ public class ProductMaterial {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "material_name", unique = true)
-    private String materialName;
+    @Column(name = "name", unique = true)
+    private String name;
 }

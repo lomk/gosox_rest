@@ -1,8 +1,6 @@
 package ua.com.gosox.domains;
-
 import lombok.Getter;
 import lombok.Setter;
-
 import javax.persistence.*;
 
 
@@ -21,7 +19,7 @@ public class ProductDetails {
     private Long quantity;
 
     @Column(name = "purchase_price")
-    private String purchasePrice;
+    private Float purchasePrice;
     @Column(name = "number_of_orders")
     private Long numberOfOrders;
 //    @Column(name = "number_of_views")

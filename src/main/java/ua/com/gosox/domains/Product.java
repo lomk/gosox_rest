@@ -30,7 +30,7 @@ public class Product {
     @Column(name = "internal_code")
     private Long internalCode;
     @Column(name = "price_uah")
-    private Long priceUah;
+    private Long price;
     @Column(name = "is_new")
     private Boolean isNew;
     @Column(name = "in_promoution")

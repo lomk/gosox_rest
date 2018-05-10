@@ -15,6 +15,6 @@ public class ProductGender {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "gender_name", unique = true)
-    private String genderName;
+    @Column(name = "name", unique = true)
+    private String name;
 }
