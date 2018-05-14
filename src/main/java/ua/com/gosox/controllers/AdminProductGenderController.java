@@ -46,7 +46,7 @@ public class AdminProductGenderController {
                     "Unable to upate. ProductGender with id " + id + " not found."),
                     HttpStatus.NOT_FOUND);
         }
-        currentProductGender.setGenderName(productGender.getGenderName());
+        currentProductGender.setName(productGender.getName());
         productGenderRepository.save(currentProductGender);
         return new ResponseEntity<>(currentProductGender, HttpStatus.OK);
     }
@@ -57,12 +57,12 @@ public class AdminProductGenderController {
         if (productGender == null){
             return new ResponseEntity(new CustomErrorType("No productGender"),HttpStatus.NOT_ACCEPTABLE);
         }
-        if (productGender.getGenderName() == null || productGender.getGenderName().isEmpty()){
+        if (productGender.getName() == null || productGender.getName().isEmpty()){
             return new ResponseEntity(new CustomErrorType("No productGender name"),HttpStatus.NOT_ACCEPTABLE);
         }
-        if (productGenderRepository.findByGenderName(productGender.getGenderName()) != null){
+        if (productGenderRepository.findByName(productGender.getName()) != null){
             return new ResponseEntity(new CustomErrorType("Unable to create. A productGender name " +
-                    productGender.getGenderName() + " already exist."),HttpStatus.CONFLICT);
+                    productGender.getName() + " already exist."),HttpStatus.CONFLICT);
         }
         productGenderRepository.save(productGender);
         return new ResponseEntity<>(productGender, HttpStatus.CREATED);

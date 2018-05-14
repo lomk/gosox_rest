@@ -47,7 +47,7 @@ public class AdminProductSizeController {
                     "Unable to upate. ProductSize with id " + id + " not found."),
                     HttpStatus.NOT_FOUND);
         }
-        currentProductSize.setSizeName(productSize.getSizeName());
+        currentProductSize.setSize(productSize.getSize());
         productSizeRepository.save(currentProductSize);
         return new ResponseEntity<>(currentProductSize, HttpStatus.OK);
     }
@@ -58,12 +58,12 @@ public class AdminProductSizeController {
         if (productSize == null){
             return new ResponseEntity(new CustomErrorType("No productSize"),HttpStatus.NOT_ACCEPTABLE);
         }
-        if (productSize.getSizeName() == null || productSize.getSizeName().isEmpty()){
+        if (productSize.getSize() == null || productSize.getSize().isEmpty()){
             return new ResponseEntity(new CustomErrorType("No productSize name"),HttpStatus.NOT_ACCEPTABLE);
         }
-        if (productSizeRepository.findBySizeName(productSize.getSizeName()) != null){
+        if (productSizeRepository.findBySize(productSize.getSize()) != null){
             return new ResponseEntity(new CustomErrorType("Unable to create. A productSize name " +
-                    productSize.getSizeName() + " already exist."),HttpStatus.CONFLICT);
+                    productSize.getSize() + " already exist."),HttpStatus.CONFLICT);
         }
         productSizeRepository.save(productSize);
         return new ResponseEntity<>(productSize, HttpStatus.CREATED);

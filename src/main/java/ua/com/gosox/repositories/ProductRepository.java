@@ -1,141 +1,143 @@
 package ua.com.gosox.repositories;
 
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ua.com.gosox.domains.*;
 
-import java.util.List;
+
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    List<Product> findByProductBrand(ProductBrand productBrand, Pageable pageable);
-    List<Product> findByProductBrandAndProductCategory(ProductBrand productBrand,
+    Page<Product> findByProductBrand(ProductBrand productBrand, Pageable pageable);
+    Page<Product> findByProductBrandAndProductCategory(ProductBrand productBrand,
                                                        ProductCategory productCategory,
                                                        Pageable pageable);
-    List<Product> findByProductBrandAndProductCategoryAndProductGender(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductCategoryAndProductGender(ProductBrand productBrand,
                                                                        ProductCategory productCategory,
                                                                        ProductGender productGender,
                                                                        Pageable pageable);
-    List<Product> findByProductBrandAndProductCategoryAndProductGenderAndProductMaterial(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductCategoryAndProductGenderAndProductMaterial(ProductBrand productBrand,
                                                                                          ProductCategory productCategory,
                                                                                          ProductGender productGender,
                                                                                          ProductMaterial productMaterial,
                                                                                          Pageable pageable);
-    List<Product> findByProductBrandAndProductCategoryAndProductGenderAndProductMaterialAndProductSize(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductCategoryAndProductGenderAndProductMaterialAndProductSize(ProductBrand productBrand,
                                                                                                        ProductCategory productCategory,
                                                                                                        ProductGender productGender,
                                                                                                        ProductMaterial productMaterial,
                                                                                                        ProductSize productSize,
                                                                                                        Pageable pageable);
-    List<Product> findByProductBrandAndProductCategoryAndProductGenderAndProductSize(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductCategoryAndProductGenderAndProductSize(ProductBrand productBrand,
                                                                                      ProductCategory productCategory,
                                                                                      ProductGender productGender,
                                                                                      ProductSize productSize,
                                                                                      Pageable pageable);
 
-    List<Product> findByProductBrandAndProductCategoryAndProductMaterial(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductCategoryAndProductMaterial(ProductBrand productBrand,
                                                                          ProductCategory productCategory,
                                                                          ProductMaterial productMaterial,
                                                                          Pageable pageable);
-    List<Product> findByProductBrandAndProductCategoryAndProductMaterialAndProductSize(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductCategoryAndProductMaterialAndProductSize(ProductBrand productBrand,
                                                                                        ProductCategory productCategory,
                                                                                        ProductMaterial productMaterial,
                                                                                        ProductSize productSize,
                                                                                        Pageable pageable);
 
-    List<Product> findByProductBrandAndProductCategoryAndProductSize(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductCategoryAndProductSize(ProductBrand productBrand,
                                                                       ProductCategory productCategory,
                                                                       ProductSize productSize,
                                                                       Pageable pageable);
 
-    List<Product> findByProductBrandAndProductGender(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductGender(ProductBrand productBrand,
                                                      ProductGender productGender,
                                                      Pageable pageable);
 
-    List<Product> findByProductBrandAndProductGenderAndProductMaterial(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductGenderAndProductMaterial(ProductBrand productBrand,
                                                                        ProductGender productGender,
                                                                        ProductMaterial productMaterial,
                                                                        Pageable pageable);
-    List<Product> findByProductBrandAndProductGenderAndProductMaterialAndProductSize(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductGenderAndProductMaterialAndProductSize(ProductBrand productBrand,
                                                                                      ProductGender productGender,
                                                                                      ProductMaterial productMaterial,
                                                                                      ProductSize productSize,
                                                                                      Pageable pageable);
 
-    List<Product> findByProductBrandAndProductGenderAndProductSize(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductGenderAndProductSize(ProductBrand productBrand,
                                                                    ProductGender productGender,
                                                                    ProductSize productSize,
                                                                    Pageable pageable);
 
-    List<Product> findByProductBrandAndProductMaterial(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductMaterial(ProductBrand productBrand,
                                                        ProductMaterial productMaterial,
                                                        Pageable pageable);
-    List<Product> findByProductBrandAndProductMaterialAndProductSize(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductMaterialAndProductSize(ProductBrand productBrand,
                                                                      ProductMaterial productMaterial,
                                                                      ProductSize productSize,
                                                                      Pageable pageable);
 
-    List<Product> findByProductBrandAndProductSize(ProductBrand productBrand,
+    Page<Product> findByProductBrandAndProductSize(ProductBrand productBrand,
                                                    ProductSize productSize,
                                                    Pageable pageable);
 
 
-    List<Product> findByProductCategory(ProductCategory productCategory, Pageable pageable);
+    Page<Product> findByProductCategory(ProductCategory productCategory, Pageable pageable);
 
-    List<Product> findByProductCategoryAndProductGender(ProductCategory productCategory,
+    Page<Product> findByProductCategoryAndProductGender(ProductCategory productCategory,
                                                         ProductGender productGender,
                                                         Pageable pageable);
-    List<Product> findByProductCategoryAndProductGenderAndProductMaterial(ProductCategory productCategory,
+    Page<Product> findByProductCategoryAndProductGenderAndProductMaterial(ProductCategory productCategory,
                                                                           ProductGender productGender,
                                                                           ProductMaterial productMaterial,
                                                                           Pageable pageable);
-    List<Product> findByProductCategoryAndProductGenderAndProductMaterialAndProductSize(ProductCategory productCategory,
+    Page<Product> findByProductCategoryAndProductGenderAndProductMaterialAndProductSize(ProductCategory productCategory,
                                                                                         ProductGender productGender,
                                                                                         ProductMaterial productMaterial,
                                                                                         ProductSize productSize,
                                                                                         Pageable pageable);
-    List<Product> findByProductCategoryAndProductGenderAndProductSize(ProductCategory productCategory,
+    Page<Product> findByProductCategoryAndProductGenderAndProductSize(ProductCategory productCategory,
                                                                       ProductGender productGender,
                                                                       ProductSize productSize,
                                                                       Pageable pageable);
 
-    List<Product> findByProductCategoryAndProductMaterial(ProductCategory productCategory,
+    Page<Product> findByProductCategoryAndProductMaterial(ProductCategory productCategory,
                                                           ProductMaterial productMaterial,
                                                           Pageable pageable);
-    List<Product> findByProductCategoryAndProductMaterialAndProductSize(ProductCategory productCategory,
+    Page<Product> findByProductCategoryAndProductMaterialAndProductSize(ProductCategory productCategory,
                                                                         ProductMaterial productMaterial,
                                                                         ProductSize productSize,
                                                                         Pageable pageable);
 
-    List<Product> findByProductCategoryAndProductSize(ProductCategory productCategory,
+    Page<Product> findByProductCategoryAndProductSize(ProductCategory productCategory,
                                                       ProductSize productSize,
                                                       Pageable pageable);
 
 
-    List<Product> findByProductGender(ProductGender productGender, Pageable pageable);
+    Page<Product> findByProductGender(ProductGender productGender, Pageable pageable);
 
-    List<Product> findByProductGenderAndProductMaterial(ProductGender productGender,
+    Page<Product> findByProductGenderAndProductMaterial(ProductGender productGender,
                                                         ProductMaterial productMaterial,
                                                         Pageable pageable);
 
-    List<Product> findByProductGenderAndProductMaterialAndProductSize(ProductGender productGender,
+    Page<Product> findByProductGenderAndProductMaterialAndProductSize(ProductGender productGender,
                                                                       ProductMaterial productMaterial,
                                                                       ProductSize productSize,
                                                                       Pageable pageable);
 
-    List<Product> findByProductGenderAndProductSize(ProductGender productGender,
+    Page<Product> findByProductGenderAndProductSize(ProductGender productGender,
                                                     ProductSize productSize,
                                                     Pageable pageable);
 
-    List<Product> findByProductMaterial(ProductMaterial productMaterial, Pageable pageable);
+    Page<Product> findByProductMaterial(ProductMaterial productMaterial, Pageable pageable);
 
-    List<Product> findByProductMaterialAndProductSize(ProductMaterial productMaterial,
+    Page<Product> findByProductMaterialAndProductSize(ProductMaterial productMaterial,
                                                       ProductSize productSize,
                                                       Pageable pageable);
 
-    List<Product> findByProductSize(ProductSize productSize, Pageable pageable);
+    Page<Product> findByProductSize(ProductSize productSize, Pageable pageable);
 
 
-    List<Product> findAllByProductBrandOrProductBrandOrProductCategoryOrProductGenderOrProductMaterialOrProductSize(
+    Page<Product> findAllByProductBrandOrProductBrandOrProductCategoryOrProductGenderOrProductMaterialOrProductSize(
             ProductBrand productBrand,
             ProductCategory productCategory,
             ProductGender productGender,

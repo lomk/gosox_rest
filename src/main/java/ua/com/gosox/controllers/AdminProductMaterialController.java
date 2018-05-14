@@ -47,7 +47,7 @@ public class AdminProductMaterialController {
                     "Unable to upate. ProductMaterial with id " + id + " not found."),
                     HttpStatus.NOT_FOUND);
         }
-        currentProductMaterial.setMaterialName(productMaterial.getMaterialName());
+        currentProductMaterial.setName(productMaterial.getName());
         productMaterialRepository.save(currentProductMaterial);
         return new ResponseEntity<>(currentProductMaterial, HttpStatus.OK);
     }
@@ -58,12 +58,12 @@ public class AdminProductMaterialController {
         if (productMaterial == null){
             return new ResponseEntity(new CustomErrorType("No productMaterial"),HttpStatus.NOT_ACCEPTABLE);
         }
-        if (productMaterial.getMaterialName() == null || productMaterial.getMaterialName().isEmpty()){
+        if (productMaterial.getName() == null || productMaterial.getName().isEmpty()){
             return new ResponseEntity(new CustomErrorType("No productMaterial name"),HttpStatus.NOT_ACCEPTABLE);
         }
-        if (productMaterialRepository.findByMaterialName(productMaterial.getMaterialName()) != null){
+        if (productMaterialRepository.findByName(productMaterial.getName()) != null){
             return new ResponseEntity(new CustomErrorType("Unable to create. A productMaterial name " +
-                    productMaterial.getMaterialName() + " already exist."),HttpStatus.CONFLICT);
+                    productMaterial.getName() + " already exist."),HttpStatus.CONFLICT);
         }
         productMaterialRepository.save(productMaterial);
         return new ResponseEntity<>(productMaterial, HttpStatus.CREATED);

@@ -47,7 +47,7 @@ public class AdminProductBrandController {
                     "Unable to upate. ProductBrand with id " + id + " not found."),
                     HttpStatus.NOT_FOUND);
         }
-        currentProductBrand.setBrandName(productBrand.getBrandName());
+        currentProductBrand.setName(productBrand.getName());
         productBrandRepository.save(currentProductBrand);
         return new ResponseEntity<>(currentProductBrand, HttpStatus.OK);
     }
@@ -58,12 +58,12 @@ public class AdminProductBrandController {
         if (productBrand == null){
             return new ResponseEntity(new CustomErrorType("No productBrand"),HttpStatus.NOT_ACCEPTABLE);
         }
-        if (productBrand.getBrandName() == null || productBrand.getBrandName().isEmpty()){
+        if (productBrand.getName() == null || productBrand.getName().isEmpty()){
             return new ResponseEntity(new CustomErrorType("No productBrand name"),HttpStatus.NOT_ACCEPTABLE);
         }
-        if (productBrandRepository.findByBrandName(productBrand.getBrandName()) != null){
+        if (productBrandRepository.findByName(productBrand.getName()) != null){
             return new ResponseEntity(new CustomErrorType("Unable to create. A productBrand name " +
-                    productBrand.getBrandName() + " already exist."),HttpStatus.CONFLICT);
+                    productBrand.getName() + " already exist."),HttpStatus.CONFLICT);
         }
         productBrandRepository.save(productBrand);
         return new ResponseEntity<>(productBrand, HttpStatus.CREATED);

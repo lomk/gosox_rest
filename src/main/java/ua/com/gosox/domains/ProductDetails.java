@@ -19,7 +19,7 @@ public class ProductDetails {
     private Long quantity;
 
     @Column(name = "purchase_price")
-    private Float purchasePrice;
+    private Double purchasePrice;
     @Column(name = "number_of_orders")
     private Long numberOfOrders;
 //    @Column(name = "number_of_views")

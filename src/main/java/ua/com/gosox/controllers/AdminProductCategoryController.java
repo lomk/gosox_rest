@@ -46,7 +46,7 @@ public class AdminProductCategoryController {
                     "Unable to upate. ProductCategory with id " + id + " not found."),
                     HttpStatus.NOT_FOUND);
         }
-        currentProductCategory.setCategoryName(productCategory.getCategoryName());
+        currentProductCategory.setName(productCategory.getName());
         productCategoryRepository.save(currentProductCategory);
         return new ResponseEntity<>(currentProductCategory, HttpStatus.OK);
     }
@@ -57,12 +57,12 @@ public class AdminProductCategoryController {
         if (productCategory == null){
             return new ResponseEntity(new CustomErrorType("No productCategory"),HttpStatus.NOT_ACCEPTABLE);
         }
-        if (productCategory.getCategoryName() == null || productCategory.getCategoryName().isEmpty()){
+        if (productCategory.getName() == null || productCategory.getName().isEmpty()){
             return new ResponseEntity(new CustomErrorType("No productCategory name"),HttpStatus.NOT_ACCEPTABLE);
         }
-        if (productCategoryRepository.findByCategoryName(productCategory.getCategoryName()) != null){
+        if (productCategoryRepository.findByName(productCategory.getName()) != null){
             return new ResponseEntity(new CustomErrorType("Unable to create. A productCategory with name " +
-                    productCategory.getCategoryName() + " already exist."),HttpStatus.CONFLICT);
+                    productCategory.getName() + " already exist."),HttpStatus.CONFLICT);
         }
         productCategoryRepository.save(productCategory);
         return new ResponseEntity<>(productCategory, HttpStatus.CREATED);

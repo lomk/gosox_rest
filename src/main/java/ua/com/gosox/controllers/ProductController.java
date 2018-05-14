@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 import ua.com.gosox.domains.*;
 import ua.com.gosox.errors.CustomErrorType;
@@ -33,6 +35,7 @@ public class ProductController {
     @Autowired
     ProductGenderRepository productGenderRepository;
 
+
     @RequestMapping(value = "all", method = RequestMethod.GET)
     public ResponseEntity<?> articleList(
             @RequestParam(value = "page", required = false) Optional<Integer> page,
@@ -42,6 +45,10 @@ public class ProductController {
             @RequestParam(value = "material", required = false) Optional<String> material,
             @RequestParam(value = "gender", required = false) Optional<String> gender
     ) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=UTF-8");
+        headers.add("Pages", String.valueOf(1));
+
         if (page.isPresent()
                 && !brand.isPresent()
                 && !category.isPresent()
@@ -51,14 +58,16 @@ public class ProductController {
                 ) {
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "dateField"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            Page<Product> productPage = productRepository.findAll(pageable);
-            List<Product> productList = productPage.getContent();
+            Page<Product> productPages = productRepository.findAll(pageable);
+            List<Product> productList = productPages.getContent();
 
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -69,16 +78,19 @@ public class ProductController {
                 && !material.isPresent()
                 && !size.isPresent()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductBrand(productBrand, pageable);
+            Page<Product> productPages = productRepository.findByProductBrand(productBrand, pageable);
+            List<Product> productList = productPages.getContent();
 
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -90,19 +102,21 @@ public class ProductController {
                 && !material.isPresent()
                 && !size.isPresent()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductBrandAndProductCategory(productBrand,
+            Page<Product> productPages = productRepository.findByProductBrandAndProductCategory(productBrand,
                     productCategory,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
 
@@ -117,21 +131,23 @@ public class ProductController {
                 && !material.isPresent()
                 && !size.isPresent()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductBrandAndProductCategoryAndProductGender(productBrand,
+            Page<Product> productPages = productRepository.findByProductBrandAndProductCategoryAndProductGender(productBrand,
                     productCategory,
                     productGender,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -145,24 +161,26 @@ public class ProductController {
                 && !material.get().toString().isEmpty()
                 && !size.isPresent()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList =
+            Page<Product> productPages =
                     productRepository.findByProductBrandAndProductCategoryAndProductGenderAndProductMaterial(productBrand,
                     productCategory,
                     productGender,
                     productMaterial,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -177,26 +195,28 @@ public class ProductController {
                 && size.isPresent()
                 && !size.get().toString().isEmpty()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList =
+            Page<Product> productPages =
                     productRepository.findByProductBrandAndProductCategoryAndProductGenderAndProductMaterialAndProductSize(productBrand,
                             productCategory,
                             productGender,
                             productMaterial,
                             productSize,
                             pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -210,24 +230,26 @@ public class ProductController {
                 && size.isPresent()
                 && !size.get().toString().isEmpty()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList =
+            Page<Product> productPages =
                     productRepository.findByProductBrandAndProductCategoryAndProductGenderAndProductSize(productBrand,
                             productCategory,
                             productGender,
                             productSize,
                             pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -240,21 +262,23 @@ public class ProductController {
                 && !gender.isPresent()
                 && !size.isPresent()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductBrandAndProductCategoryAndProductMaterial(productBrand,
+            Page<Product> productPages = productRepository.findByProductBrandAndProductCategoryAndProductMaterial(productBrand,
                     productCategory,
                     productMaterial,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -268,23 +292,25 @@ public class ProductController {
                 && !size.get().toString().isEmpty()
                 && !gender.isPresent()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductBrandAndProductCategoryAndProductMaterialAndProductSize(productBrand,
+            Page<Product> productPages = productRepository.findByProductBrandAndProductCategoryAndProductMaterialAndProductSize(productBrand,
                     productCategory,
                     productMaterial,
                     productSize,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -297,21 +323,23 @@ public class ProductController {
                 && !material.isPresent()
                 && !gender.isPresent()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductBrandAndProductCategoryAndProductSize(productBrand,
+            Page<Product> productPages = productRepository.findByProductBrandAndProductCategoryAndProductSize(productBrand,
                     productCategory,
                     productSize,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -323,17 +351,21 @@ public class ProductController {
                 && !size.isPresent()
                 && !material.isPresent()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductGender(productGender, pageable);
 
+            Page<Product> productPages = productRepository.findByProductGender(productGender, pageable);
+
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -346,22 +378,24 @@ public class ProductController {
                 && !material.get().toString().isEmpty()
                 && !size.isPresent()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList =
+            Page<Product> productPages =
                     productRepository.findByProductBrandAndProductGenderAndProductMaterial(productBrand,
                             productGender,
                             productMaterial,
                             pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -375,25 +409,27 @@ public class ProductController {
                 && size.isPresent()
                 && !size.get().toString().isEmpty()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList =
+            Page<Product> productPages =
                     productRepository.findByProductBrandAndProductGenderAndProductMaterialAndProductSize(
                             productBrand,
                             productGender,
                             productMaterial,
                             productSize,
                             pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -405,21 +441,23 @@ public class ProductController {
                 && !material.get().toString().isEmpty()
                 && !size.isPresent()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList =
+            Page<Product> productPages =
                     productRepository.findByProductBrandAndProductMaterial(
                             productBrand,
                             productMaterial,
                             pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -432,22 +470,24 @@ public class ProductController {
                 && size.isPresent()
                 && !size.get().toString().isEmpty()
                 ) {
-            ProductBrand productBrand = productBrandRepository.findByBrandName(brand.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductBrand productBrand = productBrandRepository.findByName(brand.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductBrandAndProductMaterialAndProductSize(
+            Page<Product> productPages = productRepository.findByProductBrandAndProductMaterialAndProductSize(
                     productBrand,
                     productMaterial,
                     productSize,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
 
@@ -459,16 +499,18 @@ public class ProductController {
                 && !material.isPresent()
                 && !gender.isPresent()
                 ) {
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductCategory(productCategory, pageable);
-
+            Page<Product> productPages = productRepository.findByProductCategory(productCategory, pageable);
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -480,20 +522,22 @@ public class ProductController {
                 && !material.isPresent()
                 && !size.isPresent()
                 ) {
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductCategoryAndProductGender(
+            Page<Product> productPages = productRepository.findByProductCategoryAndProductGender(
                     productCategory,
                     productGender,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -506,22 +550,24 @@ public class ProductController {
                 && !material.get().toString().isEmpty()
                 && !size.isPresent()
                 ) {
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductCategoryAndProductGenderAndProductMaterial(
+            Page<Product> productPages = productRepository.findByProductCategoryAndProductGenderAndProductMaterial(
                     productCategory,
                     productGender,
                     productMaterial,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -535,24 +581,26 @@ public class ProductController {
                 && size.isPresent()
                 && !size.get().toString().isEmpty()
                 ) {
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductCategoryAndProductGenderAndProductMaterialAndProductSize(
+            Page<Product> productPages = productRepository.findByProductCategoryAndProductGenderAndProductMaterialAndProductSize(
                     productCategory,
                     productGender,
                     productMaterial,
                     productSize,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -565,22 +613,24 @@ public class ProductController {
                 && size.isPresent()
                 && !size.get().toString().isEmpty()
                 ) {
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductCategoryAndProductGenderAndProductSize(
+            Page<Product> productPages = productRepository.findByProductCategoryAndProductGenderAndProductSize(
                     productCategory,
                     productGender,
                     productSize,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -592,19 +642,21 @@ public class ProductController {
                 && !gender.isPresent()
                 && !size.isPresent()
                 ) {
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductCategoryAndProductMaterial(productCategory,
+            Page<Product> productPages = productRepository.findByProductCategoryAndProductMaterial(productCategory,
                     productMaterial,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -617,22 +669,24 @@ public class ProductController {
                 && !size.get().toString().isEmpty()
                 && !gender.isPresent()
                 ) {
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductCategoryAndProductMaterialAndProductSize(
+            Page<Product> productPages = productRepository.findByProductCategoryAndProductMaterialAndProductSize(
                     productCategory,
                     productMaterial,
                     productSize,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -644,19 +698,21 @@ public class ProductController {
                 && !material.isPresent()
                 && !gender.isPresent()
                 ) {
-            ProductCategory productCategory = productCategoryRepository.findByCategoryName(category.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductCategory productCategory = productCategoryRepository.findByName(category.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductCategoryAndProductSize(productCategory,
+            Page<Product> productPages = productRepository.findByProductCategoryAndProductSize(productCategory,
                     productSize,
                     pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
 
@@ -668,16 +724,18 @@ public class ProductController {
                 && !size.isPresent()
                 && !material.isPresent()
                 ) {
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductGender(productGender, pageable);
-
+            Page<Product> productPages = productRepository.findByProductGender(productGender, pageable);
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -690,20 +748,22 @@ public class ProductController {
                 && !size.isPresent()
                 ) {
 
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductGenderAndProductMaterial(
+            Page<Product> productPages = productRepository.findByProductGenderAndProductMaterial(
                             productGender,
                             productMaterial,
                             pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -716,22 +776,25 @@ public class ProductController {
                 && size.isPresent()
                 && !size.get().toString().isEmpty()
                 ) {
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductGenderAndProductMaterialAndProductSize(
+            Page<Product> productPages = productRepository.findByProductGenderAndProductMaterialAndProductSize(
                             productGender,
                             productMaterial,
                             productSize,
                             pageable);
 
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -743,20 +806,24 @@ public class ProductController {
                 && size.isPresent()
                 && !size.get().toString().isEmpty()
                 ) {
-            ProductGender productGender = productGenderRepository.findByGenderName(gender.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductGender productGender = productGenderRepository.findByName(gender.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductGenderAndProductSize(
+            Page<Product> productPages = productRepository.findByProductGenderAndProductSize(
                             productGender,
                             productSize,
                             pageable);
+
+            List<Product> productList = productPages.getContent();
 
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
 
@@ -768,16 +835,19 @@ public class ProductController {
                 && !size.isPresent()
                 && !gender.isPresent()
                 ) {
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductMaterial(productMaterial, pageable);
+            Page<Product> productPages = productRepository.findByProductMaterial(productMaterial, pageable);
 
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -789,19 +859,21 @@ public class ProductController {
                 && size.isPresent()
                 && !size.get().toString().isEmpty()
                 ) {
-            ProductMaterial productMaterial = productMaterialRepository.findByMaterialName(material.get());
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductMaterial productMaterial = productMaterialRepository.findByName(material.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductMaterialAndProductSize(productMaterial,
+            Page<Product> productPages = productRepository.findByProductMaterialAndProductSize(productMaterial,
                             productSize,
                             pageable);
-
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         if (page.isPresent()
@@ -812,16 +884,18 @@ public class ProductController {
                 && !material.isPresent()
                 && !gender.isPresent()
                 ) {
-            ProductSize productSize = productSizeRepository.findBySizeName(size.get());
+            ProductSize productSize = productSizeRepository.findBySize(size.get());
             Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "isNew"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
-            List<Product> productList = productRepository.findByProductSize(productSize, pageable);
-
+            Page<Product> productPages = productRepository.findByProductSize(productSize, pageable);
+            List<Product> productList = productPages.getContent();
             if (productList == null) {
                 return new ResponseEntity<>(new CustomErrorType("No data found"),
                         HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(productList, HttpStatus.OK);
+            int pages = productPages.getTotalPages();
+            headers.set("Pages", String.valueOf(pages));
+            return new ResponseEntity<>(productList, headers, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(new CustomErrorType(""),
