@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(schema = "gosox", name = "PRODUCT")
+@Table(schema = "gosox", name = "ORDER")
 @Getter
 @Setter
 public class Order {
@@ -32,7 +32,7 @@ public class Order {
             mappedBy = "order")
     private Set<OrderedProduct> orderedPruducts;
 
-    @OneToOne(fetch = FetchType.LAZY,
+    @ManyToOne(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL)
     @JoinColumn(name = "delivery_type_id", nullable = false)
     private DeliveryType deliveryType;

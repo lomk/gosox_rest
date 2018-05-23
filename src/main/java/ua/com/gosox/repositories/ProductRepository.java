@@ -9,6 +9,7 @@ import ua.com.gosox.domains.*;
 
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
+    Product findByName(String name);
     Page<Product> findByProductBrand(ProductBrand productBrand, Pageable pageable);
     Page<Product> findByProductBrandAndProductCategory(ProductBrand productBrand,
                                                        ProductCategory productCategory,

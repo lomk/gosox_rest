@@ -8,6 +8,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class EntityLoader implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -29,6 +31,8 @@ public class EntityLoader implements ApplicationListener<ContextRefreshedEvent> 
     ProductGenderRepository productGenderRepository;
     @Autowired
     ProductReviewRepository productReviewRepository;
+    @Autowired
+    ProductDetailsRepository productDetailsRepository;
 
 
 
@@ -50,17 +54,17 @@ public class EntityLoader implements ApplicationListener<ContextRefreshedEvent> 
         productSize.setSize("22");
         productSizeRepository.save(productSize);
         ProductMaterial productMaterial = new ProductMaterial();
-        productMaterial.setName("Material");
+        productMaterial.setName("Material_name");
         productMaterialRepository.save(productMaterial);
         ProductGender productGender= new ProductGender();
-        productGender.setName("Name");
+        productGender.setName("Gemder_Name");
         productGenderRepository.save(productGender);
-        ProductCategory productCategory = new ProductCategory();
-        productCategory.setName("Name");
-        productCategoryRepository.save(productCategory);
         ProductBrand productBrand = new ProductBrand();
-        productBrand.setName("Product Brand");
+        productBrand.setName("Product_Brand");
         productBrandRepository.save(productBrand);
+        ProductCategory productCategory = new ProductCategory();
+        productCategory.setName("Category_name");
+        productCategoryRepository.save(productCategory);
 
         product.setBarcode(new Long(123));
         product.setFullDescription("Full description");
@@ -68,19 +72,22 @@ public class EntityLoader implements ApplicationListener<ContextRefreshedEvent> 
         product.setInPromoution(true);
         product.setInternalCode(new Long(1));
         product.setIsNew(true);
-        product.setName("Name");
+        product.setName("ProductName");
         product.setPrice(new Long(21));
-        product.setProductBrand(productBrand);
-        product.setProductCategory(productCategory);
-        product.setProductMaterial(productMaterial);
-        product.setProductGender(productGender);
-        product.setProductSize(productSize);
+        product.setProductBrand(productBrandRepository.findByName("Product_Brand"));
+        product.setProductCategory(productCategoryRepository.findByName("Category_name"));
+        product.setProductMaterial(productMaterialRepository.findByName("Material_name"));
+        product.setProductGender(productGenderRepository.findByName("Gemder_Name"));
+        product.setProductSize(productSizeRepository.findBySize("22"));
         productRepository.save(product);
 
 
-
         ProductDetails productDetails = new ProductDetails();
-        productDetails.setProduct(product);
+        Product p = productRepository.findByName("ProductName");
+        System.out.println("P-name: " + p.getName());
+
+
+        productDetails.setProduct(p);
         productDetails.setNumberOfCart(new Long(1));
         productDetails.setNumberOfOrders(new Long(1));
         productDetails.setNumberOfRefusal(new Long(1));
@@ -89,9 +96,15 @@ public class EntityLoader implements ApplicationListener<ContextRefreshedEvent> 
         productDetails.setQuantity(new Long(1));
         productDetails.setPurchasePrice(new Double(1));
 
+        productDetailsRepository.save(productDetails);
+
 
         ProductReview productReview = new ProductReview();
         productReview.setProduct(product);
+        productReview.setUser(user);
+        productReviewRepository.save(productReview);
+
+
     }
 }
 

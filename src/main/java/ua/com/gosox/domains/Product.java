@@ -51,4 +51,10 @@ public class Product {
     @JoinColumn(name = "product_material_id")
     private ProductMaterial productMaterial;
 
+
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.MERGE,
+            mappedBy = "product")
+    private ProductDetails productDetails;
+
 }

@@ -56,7 +56,7 @@ public class ProductController {
                 && !material.isPresent()
                 && !size.isPresent()
                 ) {
-            Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "dateField"));
+            Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "name"));
             Pageable pageable = new PageRequest(page.get(), 19, sort);
             Page<Product> productPages = productRepository.findAll(pageable);
             List<Product> productList = productPages.getContent();

@@ -1,11 +1,12 @@
 package ua.com.gosox.domains;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 
 
 @Entity
-@Table(schema = "gosox", name = "ORDER_STATUS")
+@Table(schema = "gosox", name = "PRODUCT_DETAILS")
 @Getter
 @Setter
 public class ProductDetails {
@@ -31,9 +32,10 @@ public class ProductDetails {
     @Column(name = "number_in_stock")
     private Long quantityInStock;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY,
-            cascade =  CascadeType.ALL)
-    @JoinColumn(name = "product_id", nullable = false)
+            cascade =  CascadeType.MERGE)
+    @JoinColumn(name = "product_id")
     private Product product;
 
 }

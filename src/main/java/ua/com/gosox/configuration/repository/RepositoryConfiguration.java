@@ -9,6 +9,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -23,25 +24,26 @@ import javax.persistence.EntityManagerFactory;
 import java.beans.PropertyVetoException;
 import java.util.HashMap;
 
-//@Configuration
-//@EnableJpaRepositories(
-//        basePackages = "ua.com.gosox.repositories",
-//        entityManagerFactoryRef = "adminEntityManagerFactory",
-//        transactionManagerRef = "adminTransactionManager"
-//)
-//@EntityScan("ua.com.gosox.domains.*")
-//@EnableTransactionManagement
+@Configuration
+@EnableAutoConfiguration
+@EnableJpaRepositories(
+        basePackages = "ua.com.gosox.repositories",
+        entityManagerFactoryRef = "adminEntityManagerFactory",
+        transactionManagerRef = "adminTransactionManager"
+)
+@EntityScan("ua.com.gosox.domains")
+@EnableTransactionManagement
 public class RepositoryConfiguration {
-   /* @Value("${admin.datasource.driver}")
+    @Value("${spring.datasource.driver}")
     private String DB_DRIVER;
 
-    @Value("${admin.datasource.password}")
+    @Value("${spring.datasource.password}")
     private String DB_PASSWORD;
 
-    @Value("${admin.datasource.url}")
+    @Value("${spring.datasource.url}")
     private String DB_URL;
 
-    @Value("${admin.datasource.username}")
+    @Value("${spring.datasource.username}")
     private String DB_USERNAME;
 
     @Value("${hibernate.dialect}")
@@ -92,7 +94,7 @@ public class RepositoryConfiguration {
     {
 
         HashMap<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto", "update");
+        properties.put("hibernate.hbm2ddl.auto", "create-drop");
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.put("hibernate.show_sql", "true");
 //        properties.put("hibernate.hbm2ddl.auto", "HIBERNATE_HBM2DDL_AUTO");
@@ -111,5 +113,5 @@ public class RepositoryConfiguration {
     public JpaTransactionManager adminTransactionManager(@Qualifier("adminEntityManagerFactory") final EntityManagerFactory factory)
     {
         return new JpaTransactionManager(factory);
-    }*/
+    }
 }
