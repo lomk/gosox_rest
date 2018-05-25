@@ -1,7 +1,5 @@
 package ua.com.gosox.domains;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,5 +1,6 @@
 package ua.com.gosox.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,7 @@ public class CartProduct {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
