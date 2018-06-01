@@ -23,6 +23,12 @@ public class UserProfile {
     @ManyToOne
     @JoinColumn(name = "user_gender_id")
     private UserGender userGender;
+    @ManyToOne
+    @JoinColumn(name = "user_gender_id")
+    private City city;
+
+    @Column(name = "address")
+    private String address;
 
     @Column(name = "phone")
     private String phone;
