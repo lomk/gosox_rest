@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
+
 import org.springframework.web.bind.annotation.*;
 import ua.com.gosox.domains.*;
 import ua.com.gosox.errors.CustomErrorType;
@@ -34,6 +34,18 @@ public class ProductController {
     ProductMaterialRepository productMaterialRepository;
     @Autowired
     ProductGenderRepository productGenderRepository;
+
+
+    @RequestMapping(value = "top", method = RequestMethod.GET)
+    public ResponseEntity<?> listTopProducts() {
+        List<Product> products = productRepository.findTop10ByInPromoution(true);
+
+        if (products == null){
+            return new ResponseEntity(new CustomErrorType("No data found"),
+                    HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
 
 
     @RequestMapping(value = "all", method = RequestMethod.GET)

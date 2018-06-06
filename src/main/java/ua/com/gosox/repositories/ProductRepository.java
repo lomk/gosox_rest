@@ -6,10 +6,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ua.com.gosox.domains.*;
 
+import java.util.List;
 
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    Product findByName(String name);
+    List<Product> findByName(String name);
+    List<Product> findByIsNewAndInPromoution(Boolean isNew, Boolean inAction);
+    List<Product> findByInPromoution(Boolean inPromoution);
+    List<Product> findTop10ByInPromoution(Boolean inPromoution);
+    Product findByIsNew(Boolean isNew);
     Page<Product> findByProductBrand(ProductBrand productBrand, Pageable pageable);
     Page<Product> findByProductBrandAndProductCategory(ProductBrand productBrand,
                                                        ProductCategory productCategory,

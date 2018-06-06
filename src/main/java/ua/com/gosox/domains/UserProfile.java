@@ -20,11 +20,13 @@ public class UserProfile {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+
     @ManyToOne
     @JoinColumn(name = "user_gender_id")
     private UserGender userGender;
+
     @ManyToOne
-    @JoinColumn(name = "user_gender_id")
+    @JoinColumn(name = "city_id")
     private City city;
 
     @Column(name = "address")

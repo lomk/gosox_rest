@@ -83,7 +83,8 @@ public class EntityLoader implements ApplicationListener<ContextRefreshedEvent> 
 
 
         ProductDetails productDetails = new ProductDetails();
-        Product p = productRepository.findByName("ProductName");
+        List<Product> plist = productRepository.findByName("ProductName");
+        Product p = plist.get(0);
         System.out.println("P-name: " + p.getName());
 
 
